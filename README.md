@@ -1,6 +1,6 @@
  # 📚 Projeto Ecosy
 
-> **Resumo rápido:** [Uma frase curta que descreve o objetivo do projeto. Exemplo: “Uma aplicação web para monitorar compostagem doméstica usando sensores IoT.”]
+> **Resumo rápido:** [Projeto para o desafio de "Solução Tecnológica para gestão eficiente do programa de Aquisição e Distribuição de Sementes".]
 
 ---
 
