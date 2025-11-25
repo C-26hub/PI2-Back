@@ -39,11 +39,11 @@ public class Entrega {
     public Entrega() {
     }
 
-    public Long getIdEntrega() {
+    public Long getId() {
         return id;
     }
 
-    public void setIdEntrega(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
