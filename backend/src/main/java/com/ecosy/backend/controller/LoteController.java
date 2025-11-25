@@ -1,9 +1,11 @@
 package com.ecosy.backend.controller;
 
+import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Lote;
 import com.ecosy.backend.repository.LoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,11 @@ public class LoteController {
     }
 
     @GetMapping("/{id}")
-    public Lote buscarPorId(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Lote> buscarPorId(@PathVariable Long id) {
+        Lote lote = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Lote não encontrado com ID: " + id));
+
+        return ResponseEntity.ok(lote);
     }
 
     @PostMapping

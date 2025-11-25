@@ -1,6 +1,7 @@
 package com.ecosy.backend.controller;
 
 import com.ecosy.backend.dto.LoginDTO;
+import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Usuario;
 import com.ecosy.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,10 @@ public class UsuarioController {
 
 
     @GetMapping("/{id}")
-    public Usuario buscarPorId(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + id));
+
+        return ResponseEntity.ok(usuario);
     }
 }

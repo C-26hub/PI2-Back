@@ -1,9 +1,11 @@
 package com.ecosy.backend.controller;
 
+import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Beneficiario;
 import com.ecosy.backend.repository.BeneficiarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,11 @@ public class BeneficiarioController {
     }
 
     @GetMapping("/{id}")
-    public Beneficiario buscarPorId(@PathVariable Long id){
-        return repository.findById(id).orElse(null);
+    public ResponseEntity<Beneficiario> buscarPorId(@PathVariable Long id) {
+        Beneficiario obj = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Beneficiário não encontrado com ID: " + id));
+
+        return ResponseEntity.ok(obj);
     }
 
     @PostMapping
