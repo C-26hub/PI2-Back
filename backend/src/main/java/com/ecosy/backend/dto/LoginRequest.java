@@ -1,6 +1,6 @@
 package com.ecosy.backend.dto;
 
-public class LoginDTO {
+public class LoginRequest {
     public String email;
     public String senha;
 }

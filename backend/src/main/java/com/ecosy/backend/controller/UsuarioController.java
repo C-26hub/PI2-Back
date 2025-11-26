@@ -1,6 +1,7 @@
 package com.ecosy.backend.controller;
 
-import com.ecosy.backend.dto.LoginDTO;
+import com.ecosy.backend.dto.LoginRequest;
+import com.ecosy.backend.dto.LoginResponse;
 import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Usuario;
 import com.ecosy.backend.repository.UsuarioRepository;
@@ -39,18 +40,26 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginData) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginData) {
+
         Usuario usuario = repository.findByEmail(loginData.email);
 
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email não encontrado");
+        if (usuario != null && passwordEncoder.matches(loginData.senha, usuario.getSenha())) {
+
+            String roleFormatada = usuario.getNivelAcesso().name().toLowerCase();
+
+            LoginResponse response = new LoginResponse(
+                    usuario.getId(),
+                    usuario.getNome(),
+                    usuario.getEmail(),
+                    roleFormatada,
+                    "token-simulado-backend-" + usuario.getId() // Token provisório
+            );
+
+            return ResponseEntity.ok(response);
         }
 
-        if (passwordEncoder.matches(loginData.senha, usuario.getSenha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! (Acesso: " + usuario.getNivelAcesso() + ")");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha incorreta");
-        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
     }
 
 
