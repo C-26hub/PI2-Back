@@ -1,5 +1,6 @@
 package com.ecosy.backend.controller;
 
+import com.ecosy.backend.enums.StatusUsuario;
 import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Beneficiario;
 import com.ecosy.backend.repository.BeneficiarioRepository;
@@ -40,4 +41,48 @@ public class BeneficiarioController {
 
         return repository.save(beneficiario);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Beneficiario> atualizar(@PathVariable Long id, @RequestBody Beneficiario dadosAtualizados) {
+
+        Beneficiario beneficiarioExistente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Beneficiário não encontrado com ID: " + id));
+
+        beneficiarioExistente.setNome(dadosAtualizados.getNome());
+        beneficiarioExistente.setCpf(dadosAtualizados.getCpf());
+        beneficiarioExistente.setTelefone(dadosAtualizados.getTelefone());
+        beneficiarioExistente.setAssociacao(dadosAtualizados.getAssociacao());
+        beneficiarioExistente.setStatus(dadosAtualizados.getStatus());
+
+        if (dadosAtualizados.getTecnicoResponsavel() != null) {
+            beneficiarioExistente.setTecnicoResponsavel(dadosAtualizados.getTecnicoResponsavel());
+        }
+
+        if (dadosAtualizados.getEndereco() != null) {
+            beneficiarioExistente.getEndereco().setRua(dadosAtualizados.getEndereco().getRua());
+            beneficiarioExistente.getEndereco().setCidade(dadosAtualizados.getEndereco().getCidade());
+            beneficiarioExistente.getEndereco().setEstado(dadosAtualizados.getEndereco().getEstado());
+            beneficiarioExistente.getEndereco().setCep(dadosAtualizados.getEndereco().getCep());
+        }
+
+        Beneficiario atualizado = repository.save(beneficiarioExistente);
+
+        return ResponseEntity.ok(atualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirLogicamente(@PathVariable Long id) {
+
+        Beneficiario beneficiario = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Beneficiário não encontrado com ID: " + id));
+
+        beneficiario.setStatus(StatusUsuario.INATIVO.name());
+
+        // 3. Salva a alteração no banco
+        repository.save(beneficiario);
+
+        // 4. Retorna 204 No Content (Padrão de sucesso para delete)
+        return ResponseEntity.noContent().build();
+    }
+
 }

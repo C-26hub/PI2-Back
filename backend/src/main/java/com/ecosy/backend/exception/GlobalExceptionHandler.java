@@ -33,13 +33,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
         String error = "Violação de Integridade de Dados";
-        HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
+        HttpStatus status = HttpStatus.CONFLICT; // 409
 
-        String message = "Erro de banco de dados. Verifique se já não existe um registro com este CPF, Email ou Código.";
+        // Mensagem padrão
+        String message = "Erro de operação no banco de dados.";
 
-        // Tenta pegar a mensagem específica do banco se possível
-        if (e.getMessage() != null && e.getMessage().contains("Duplicate entry")) {
+        // Tenta descobrir a causa raiz
+        String rootMsg = e.getRootCause() != null ? e.getRootCause().getMessage() : "";
+
+        if (rootMsg.contains("Duplicate entry")) {
             message = "Já existe um registro com este dado único (CPF, Email ou Código).";
+        } else if (rootMsg.contains("foreign key constraint")) {
+            message = "Não é possível excluir ou alterar este registro pois ele possui vínculos (Entregas, Lotes, etc) no sistema.";
         }
 
         StandardError err = new StandardError(
