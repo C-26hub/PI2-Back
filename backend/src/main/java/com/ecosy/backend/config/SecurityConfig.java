@@ -7,26 +7,56 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration; // <--- Importe isto
+import org.springframework.web.cors.CorsConfigurationSource; // <--- Importe isto
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource; // <--- Importe isto
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. Define o algoritmo de hash (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. Configura as regras de acesso (Libera tudo por enquanto)
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Desabilita proteção contra CSRF (necessário para POSTs via Postman)
+                // 1. Desativa CSRF (necessário para POST/PUT/DELETE funcionarem sem token de sessão)
+                .csrf(csrf -> csrf.disable())
+
+                // 2. Ativa a configuração de CORS que definimos abaixo
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 3. Libera tudo (por enquanto)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // PERMITE TUDO (Cuidado: só para desenvolvimento!)
+                        .anyRequest().permitAll()
                 );
 
         return http.build();
+    }
+
+    // --- A CONFIGURAÇÃO MÁGICA DE CORS ---
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Permite o Front-end (pode usar "*" para liberar tudo ou ser específico)
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+
+        // OBRIGATÓRIO: Listar explicitamente os verbos permitidos
+        // O erro aconteceu porque o DELETE não estava liberado por padrão
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Permite headers (Authorization, Content-Type, etc)
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica para todas as rotas
+        return source;
     }
 }

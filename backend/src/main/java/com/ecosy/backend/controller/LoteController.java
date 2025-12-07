@@ -36,4 +36,37 @@ public class LoteController {
     public Lote criar(@RequestBody Lote lote) {
         return repository.save(lote);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Lote> atualizar(@PathVariable Long id, @RequestBody Lote dados) {
+
+        Lote loteExistente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Lote não encontrado com ID: " + id));
+
+        loteExistente.setCodigo(dados.getCodigo());
+        loteExistente.setTipoSemente(dados.getTipoSemente());
+        loteExistente.setQuantidadeTotal(dados.getQuantidadeTotal());
+        loteExistente.setStatusLote(dados.getStatusLote());
+        loteExistente.setDataAquisicao(dados.getDataAquisicao());
+        loteExistente.setOrigem(dados.getOrigem());
+
+        Lote loteAtualizado = repository.save(loteExistente);
+
+        return ResponseEntity.ok(loteAtualizado);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Lote não encontrado com ID: " + id);
+        }
+
+        repository.deleteById(id);
+
+        // 3. Retorna sucesso (204)
+        return ResponseEntity.noContent().build();
+    }
 }

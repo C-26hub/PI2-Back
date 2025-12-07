@@ -11,6 +11,7 @@ import com.ecosy.backend.repository.LoteRepository;
 import com.ecosy.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,5 +71,36 @@ public class EntregaController {
         entregaInput.setUsuario(tecnicoReal);
 
         return repository.save(entregaInput);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Entrega> atualizar(@PathVariable Long id, @RequestBody Entrega dados) {
+
+        Entrega entregaExistente = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entrega não encontrada com ID: " + id));
+
+        entregaExistente.setQtdEntregue(dados.getQtdEntregue());
+        entregaExistente.setStatusEntrega(dados.getStatusEntrega());
+
+        if (dados.getDataEntrega() != null) {
+            entregaExistente.setDataEntrega(dados.getDataEntrega());
+        }
+
+        Entrega entregaAtualizada = repository.save(entregaExistente);
+
+        return ResponseEntity.ok(entregaAtualizada);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Entrega não encontrada com ID: " + id);
+        }
+
+        repository.deleteById(id);
+
+        // 3. Retorna 204 No Content
+        return ResponseEntity.noContent().build();
     }
 }

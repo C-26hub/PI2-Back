@@ -2,6 +2,7 @@ package com.ecosy.backend.controller;
 
 import com.ecosy.backend.dto.LoginRequest;
 import com.ecosy.backend.dto.LoginResponse;
+import com.ecosy.backend.enums.StatusUsuario;
 import com.ecosy.backend.exception.ResourceNotFoundException;
 import com.ecosy.backend.model.Usuario;
 import com.ecosy.backend.repository.UsuarioRepository;
@@ -27,6 +28,14 @@ public class UsuarioController {
     @GetMapping
     public List<Usuario> listar(){
         return repository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + id));
+
+        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping
@@ -62,12 +71,28 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos");
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario dadosAtualizados) {
         Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + id));
 
-        return ResponseEntity.ok(usuario);
+        usuario.setNome(dadosAtualizados.getNome());
+        usuario.setSobrenome(dadosAtualizados.getSobrenome());
+        usuario.setEmail(dadosAtualizados.getEmail());
+        usuario.setNivelAcesso(dadosAtualizados.getNivelAcesso()); // GESTOR ou TECNICO
+
+        return ResponseEntity.ok(repository.save(usuario));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com ID: " + id));
+
+        usuario.setStatusUsuario(StatusUsuario.INATIVO);
+
+        repository.save(usuario);
+        return ResponseEntity.noContent().build();
+    }
+
 }
