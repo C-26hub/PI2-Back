@@ -1,6 +1,7 @@
-# Ecosy
 
-> **Ecosy** é uma plataforma digital para a gestão, distribuição e rastreabilidade do programa de aquisição de **sementes crioulas** em Pernambuco.
+# **Ecosy**
+
+O **Ecosy** é uma plataforma digital para a gestão, distribuição e rastreabilidade do programa de aquisição de **sementes crioulas** em Pernambuco.
 
 O sistema conecta gestores públicos, técnicos de campo e agricultores familiares, substituindo o controle manual (planilhas, papel) por um fluxo de trabalho digital, eficiente e transparente.
 
@@ -10,8 +11,8 @@ Este repositório contém o **Backend** do projeto Ecosy, uma API RESTful desenv
 
 O projeto foi construído utilizando as melhores práticas de desenvolvimento Java moderno:
 
-* **Java 21**: Linguagem base (Versão LTS).
-* **Spring Boot 3**: Framework principal.
+* **Java 21**: Linguagem base (Versão LTS)
+* **Spring Boot**: Framework principal.
 * **Spring Data JPA (Hibernate)**: Para persistência de dados e ORM (Mapeamento Objeto-Relacional).
 * **Spring Security**: Para criptografia de senhas (BCrypt) e segurança básica.
 * **MySQL**: Banco de dados relacional.
@@ -34,53 +35,52 @@ O sistema segue uma arquitetura em camadas bem definida para garantir a organiza
 
 ---
 
-## 📚 Documentação da API (Principais Endpoints)
-
-A API fornece CRUD completo para as entidades principais.
-
-###  Usuários (Autenticação e Gestão)
-| Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| POST | `/api/usuarios/login` | Autenticação (Email/Senha) |
-| POST | `/api/usuarios` | Criar novo Gestor ou Técnico |
-| GET | `/api/usuarios` | Listar usuários |
-
-###  Beneficiários (Agricultores)
-| Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| GET | `/api/beneficiarios` | Listar todos (Filtra ativos) |
-| GET | `/api/beneficiarios/{id}` | Detalhes completos |
-| POST | `/api/beneficiarios` | Cadastrar novo (c/ endereço) |
-| PUT | `/api/beneficiarios/{id}` | Atualizar dados cadastrais |
-| PATCH | `/api/beneficiarios/{id}/status` | Ativar/Inativar (Soft Delete) |
-| DELETE | `/api/beneficiarios/{id}` | Exclusão (Admin) |
-
-###  Lotes (Estoque de Sementes)
-| Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| GET | `/api/lotes` | Listar estoques disponíveis |
-| POST | `/api/lotes` | Cadastrar novo lote de sementes |
-| PUT | `/api/lotes/{id}` | Ajustar dados do lote |
-| DELETE | `/api/lotes/{id}` | Remover lote (se s/ entregas) |
-
-###  Entregas (Operação de Campo)
-| Método | Rota | Descrição |
-| :--- | :--- | :--- |
-| GET | `/api/entregas` | Listar entregas |
-| POST | `/api/entregas` | Registrar nova entrega (baixa estoque) |
-| PUT | `/api/entregas/{id}` | Corrigir lançamento |
-| DELETE | `/api/entregas/{id}` | Remover lançamento |
-
----
-
 ## 🚀 Como Rodar o Projeto
 
 ### Pré-requisitos
 * Java JDK 21 instalado.
 * Maven instalado.
-* MySQL Server rodando na porta 3306.
+* MySQL Server rodando na porta 3306 ou 3307.
 
 ### 1. Clonar o Repositório
 ```bash
-git clone [https://github.com/C-26hub/PI2-Back.git](https://github.com/C-26hub/PI2-Back.git)
-cd PI2-Back
+git clone https://github.com/C-26hub/PI2-Back.git
+```
+
+### 2. Configurar o Banco de Dados
+Crie um banco de dados vazio no seu MySQL:
+
+SQL
+```bash
+CREATE DATABASE ecosy_db;
+```
+
+Abra o arquivo src/main/resources/application.properties e configure suas credenciais:
+
+Properties
+```bash
+spring.datasource.url=jdbc:mysql://localhost:3306/ecosy_db?useTimezone=true&serverTimezone=UTC
+spring.datasource.username=seu_usuario_mysql
+spring.datasource.password=sua_senha_mysql
+
+# O Hibernate criará as tabelas automaticamente
+spring.jpa.hibernate.ddl-auto=update
+```
+
+3. Executar a Aplicação
+No terminal, dentro da pasta do projeto:
+
+Bash
+```bash
+mvn spring-boot:run
+```
+O servidor iniciará em http://localhost:8080.
+
+
+## 👥 Equipe
+- **Arthur Filipe Rodrigues da Silva** – arthur.filipe2402@gmail.com
+- **Filipe Xavier dos Santos** – xfilipe2006.santos@gmail.com   
+- **Maria Cecília de Lima e Silva** – cecilmari33@gmail.com  
+- **Maria Eduarda Pereira Vilarim** – vilarim051@gmail.com
+- **Matheus Alves de Arruda** – matheusalves2906@gmail.com
+
